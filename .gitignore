@@ -1,0 +1,9 @@
+*.zip
+.txt
+.env
+__pycache__/
+*.pyc
+venv/
+.venv/
+ats_database.db
+resumes_to_process/

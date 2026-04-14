@@ -1,0 +1,36 @@
+[
+    {
+        "name": "Abhay Tiwari",
+        "email": "abhay.tiwari.work3003@gmail.com",
+        "phone": "+91-9997127833",
+        "location": "Kanpur",
+        "education": "Bachelor's Degree",
+        "experience": [
+            "Internship / < 1 Year"
+        ],
+        "skills": [
+            "aws",
+            "bootstrap",
+            "django",
+            "git",
+            "itsm",
+            "java",
+            "javascript",
+            "leadership",
+            "management",
+            "microservices",
+            "mysql",
+            "next.js",
+            "python",
+            "react",
+            "spring boot",
+            "sql",
+            "tailwind"
+        ],
+        "profile_pic": "No Photo",
+        "status": "Processed",
+        "filename": "abhay (2).pdf",
+        "job_id": "1",
+        "match_score": 70
+    }
+]

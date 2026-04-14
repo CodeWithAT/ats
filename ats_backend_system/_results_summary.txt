@@ -1,0 +1,68 @@
+abhay (2).pdf
+  name=Abhay Tiwari, email=abhay.tiwari.work3003@gmail.com
+  loc=Kanpur, exp=Internship / < 1 Year
+
+Document 10.docx.pdf
+  name=Taylor, email=0100taylor@example.comtaylorphillips
+  loc=Not Found, exp=Fresher
+
+Document 11.docx.pdf
+  name=Jordan Mitchell, email=majordan@example.com
+  loc=Boston, exp=5 Years
+
+Document 12.docx.pdf
+  name=Full Name, email=fullnameyourname@example.com
+  loc=Not Found, exp=Fresher
+
+Document 13.docx.pdf
+  name=Tonnie Thomsen, email=velopment.emailtonnie@example.comwebsitewww.int
+  loc=Santa Fe, exp=Fresher
+
+Document 15.docx.pdf
+  name=Dian Nugraha, email=20xxdian@example.comcommunication
+  loc=Berkeley, exp=5 Years
+
+Document 17.docx.pdf
+  name=Kai Carter, email=kai@lamnahealthcare.comexperie
+  loc=Not Found, exp=Fresher
+
+Document 18.docx.pdf
+  name=Kai Carter, email=w.lamnahealthcare.comkai@lamnahealthcare.comexperie
+  loc=Not Found, exp=Fresher
+
+Document 19.docx.pdf
+  name=Manasi, email=aartdirectormanasi@example.comsundaradesign
+  loc=Pune, exp=Fresher
+
+Document 20.docx.pdf
+  name=Quarantino, email=ectandclient.someone@example.comwww.excellentwe
+  loc=Not Found, exp=Fresher
+
+Document 21.docx.pdf
+  name=Kristi, email=432909.555.0100kristi@example.comwww.interestingsi
+  loc=Avenue Redmond, exp=Fresher
+
+Document 8.docx.pdf
+  name=Kai Carter, email=kai@lamnahealthcare.com
+  loc=Not Found, exp=Fresher
+
+Document 9.docx.pdf
+  name=Document Docx, email=Not Found
+  loc=Not Found, exp=Fresher
+
+MohitResume3+yrs.pdf
+  name=Mohit Sharma, email=mohits12052000@gmail.com
+  loc=Noida, exp=3 Years
+
+Riddhi updated freshh.pdf
+  name=Riddhi Singla, email=singlariddhi030@gmail.com
+  loc=Ghaziabad, exp=1 Years
+
+Screenshot_4-4-2026_122912_.jpeg
+  name=Abhay Tiwari, email=work3003@gmail.comlinkedin.coi
+  loc=Techni-, exp=Internship / < 1 Year
+
+Screenshot_4-4-2026_174635_.jpeg
+  name=Mohit Sharma, email=tsharmamohits12052000@gmail.com
+  loc=Noida, exp=3 Years
+
