@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Table } from '@tiptap/extension-table';
@@ -142,6 +142,12 @@ export default function TiptapEditor({
     onTransaction: () => { setUpdateIndex((val) => val + 1); },
     onSelectionUpdate: () => { setUpdateIndex((val) => val + 1); },
   });
+
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   return (
     // The Main Wrapper: Fully responsive width

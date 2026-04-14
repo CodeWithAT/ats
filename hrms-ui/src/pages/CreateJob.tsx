@@ -70,8 +70,10 @@ export default function CreateJob() {
         </h2>
       </div>
 
-      <div className="flex-1 overflow-auto bg-gray-50/30 px-4 lg:px-10 py-6">
-        <div className="max-w-[1000px] mx-auto bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="flex-1 flex flex-col overflow-hidden px-4 lg:px-10 py-6 bg-gray-50/30">
+        <div className="w-full h-full max-w-[1600px] mx-auto flex flex-col min-h-0">
+          <div className="flex flex-col flex-1 w-full rounded-lg border border-gray-200 bg-white shadow-sm overflow-auto relative p-6 lg:p-8">
+            <div className="max-w-[1000px] w-full mx-auto">
 
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -134,6 +136,9 @@ export default function CreateJob() {
               >
                 {jobToEdit ? "Update Job" : "Save & Publish"}
               </button>
+            </div>
+          </div>
+              </div>
             </div>
           </div>
         </div>
