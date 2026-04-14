@@ -138,11 +138,10 @@ export default function CreateJob() {
               </button>
             </div>
           </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 }
