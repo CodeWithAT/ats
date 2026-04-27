@@ -81,7 +81,7 @@ export default function TiptapEditor({
     <div className="border border-gray-200 rounded-lg shadow-sm bg-white overflow-hidden flex flex-col w-full">
       <MenuBar editor={editor} />
       {/* Global CSS for basic formatting inside the editor */}
-      <style jsx global>{`
+      <style>{`
         .ProseMirror h1 { font-size: 1.8em; font-weight: bold; margin-bottom: 0.5em; }
         .ProseMirror h2 { font-size: 1.5em; font-weight: bold; margin-bottom: 0.5em; }
         .ProseMirror ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.5em; }

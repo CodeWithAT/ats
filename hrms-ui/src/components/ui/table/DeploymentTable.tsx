@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusCell } from './StatusCell';
 
 export default function DeploymentTable() {

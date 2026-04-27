@@ -1,22 +1,15 @@
-import { useState, useEffect } from "react";
 import { Users, Briefcase, Activity, CheckCircle2, XCircle, Sparkles, Wifi } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { useJobs } from "@/context/JobsContext";
-
-type SystemStatus = { online: boolean; message: string; candidateCount: number };
+import { useDashboard } from "@/context/DashboardContext";
 
 export default function OverviewPage() {
   const { jobs } = useJobs();
-  const [status, setStatus] = useState<SystemStatus | null>(null);
+  const { metrics, isLoading } = useDashboard();
 
-  useEffect(() => {
-    fetch("/api/system-status")
-      .then((r) => r.json())
-      .then(setStatus)
-      .catch(() => setStatus({ online: false, message: "Cannot reach API server", candidateCount: 0 }));
-  }, []);
-
-  const activeJobs = jobs.filter((j) => j.status === "Active").length;
+  const isOnline = !isLoading && metrics !== null;
+  const candidateCount = metrics?.totalCandidates ?? "—";
+  const activeJobs = metrics?.activeJobs ?? jobs.filter((j) => j.status === "Active").length;
 
   const departmentCounts = jobs.reduce((acc, job) => {
     acc[job.department] = (acc[job.department] || 0) + 1;
@@ -28,7 +21,7 @@ export default function OverviewPage() {
   return (
     <div className="flex flex-col h-full w-full bg-white absolute inset-0">
       {/* Header bar — matches DataTable header exactly */}
-      <div className="shrink-0 bg-white px-4 lg:px-10 pt-4 pb-2 border-b border-gray-100 flex flex-row items-center justify-between gap-3 w-full z-20 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      <div className="shrink-0 bg-white px-4 lg:px-10 py-4 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full z-20 shadow-[0_1px_2px_rgba(0,0,0,0.05)] min-h-[72px]">
         <h2 className="text-[20px] font-semibold tracking-tight text-gray-900 shrink-0">Overview</h2>
       </div>
 
@@ -37,29 +30,29 @@ export default function OverviewPage() {
 
         {/* System Status */}
         <div className={`flex items-center gap-4 p-4 rounded-xl border shadow-sm transition-all ${
-          status?.online
+          isOnline
             ? "bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200"
-            : status === null
+            : isLoading
             ? "bg-white border-gray-200 animate-pulse"
             : "bg-gradient-to-r from-red-50 to-rose-50 border-red-200"
         }`}>
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-            status?.online ? "bg-emerald-100" : status === null ? "bg-gray-200" : "bg-red-100"
+            isOnline ? "bg-emerald-100" : isLoading ? "bg-gray-200" : "bg-red-100"
           }`}>
-            {status?.online ? <CheckCircle2 size={20} className="text-emerald-600" /> : status === null ? null : <XCircle size={20} className="text-red-500" />}
+            {isOnline ? <CheckCircle2 size={20} className="text-emerald-600" /> : isLoading ? null : <XCircle size={20} className="text-red-500" />}
           </div>
           <div className="flex-1 min-w-0">
-            <p className={`text-[15px] font-semibold ${status?.online ? "text-emerald-800" : "text-gray-800"}`}>
-              {status?.message || "Checking system status..."}
+            <p className={`text-[15px] font-semibold ${isOnline ? "text-emerald-800" : "text-gray-800"}`}>
+              {isOnline ? "System Online & Synced" : isLoading ? "Checking system status..." : "Offline"}
             </p>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <Wifi size={11} className={status?.online ? "text-emerald-500" : "text-gray-400"} />
+              <Wifi size={11} className={isOnline ? "text-emerald-500" : "text-gray-400"} />
               <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wider">
-                {status?.online ? "Backend connected to ats_database.db" : "Waiting for connection..."}
+                {isOnline ? "Backend connected to ats_database.db" : "Waiting for connection..."}
               </span>
             </div>
           </div>
-          {status?.online && (
+          {isOnline && (
             <div className="relative flex h-3 w-3 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
@@ -72,7 +65,7 @@ export default function OverviewPage() {
           {[
             {
               label: "Total Candidates",
-              value: status?.candidateCount ?? "—",
+              value: candidateCount,
               icon: <Users size={20} className="text-blue-500" />,
               bg: "bg-blue-50",
             },
@@ -84,7 +77,7 @@ export default function OverviewPage() {
             },
             {
               label: "System Status",
-              value: status?.online ? "Online" : "Offline",
+              value: isOnline ? "Online" : "Offline",
               icon: <Activity size={20} className="text-violet-500" />,
               bg: "bg-violet-50",
             },
@@ -176,7 +169,7 @@ export default function OverviewPage() {
                     paddingAngle={5}
                     dataKey="value"
                   >
-                    {pieData.map((entry, index) => (
+                    {pieData.map((_entry, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>

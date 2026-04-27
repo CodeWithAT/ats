@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MapPin, Plus, X } from "lucide-react";
+import { ArrowUpDown, MapPin, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

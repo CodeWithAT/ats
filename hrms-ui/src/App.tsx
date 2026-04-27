@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import DashboardLayout from "./components/DashboardLayout";
 import CandidatesTable from "./components/CandidatesTable";
 import JobsTable from "./components/JobsTable";
 import CreateJob from "./pages/CreateJob";
 import OverviewPage from "./pages/OverviewPage";
+import SettingsPage from "./pages/SettingsPage";
 import { JobsProvider } from "./context/JobsContext";
 
 // Placeholder for unbuilt routes
@@ -25,31 +27,46 @@ const PlaceholderPage = () => {
   );
 };
 
+import { AuthProvider } from "./context/AuthContext";
+import { DashboardProvider } from "./context/DashboardContext";
+import { CandidatesProvider } from "./context/CandidatesContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 export default function App() {
   return (
-    <JobsProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Authentication */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+    <AuthProvider>
+      <JobsProvider>
+        <CandidatesProvider>
+          <DashboardProvider>
+            <BrowserRouter>
+              <Routes>
+                {/* Authentication */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/" element={<Navigate to="/login" replace />} />
 
-          {/* Main Application Layout */}
-          <Route element={<DashboardLayout />}>
-            {/* Working Routes */}
-            <Route path="/overview" element={<OverviewPage />} />
-            <Route path="/jobs" element={<JobsTable />} />
-            <Route path="/create-job" element={<CreateJob />} />
-            <Route path="/candidates" element={<CandidatesTable />} />
-            
-            {/* Dynamic fallback for other routes */}
-            <Route path="/:pageId" element={<PlaceholderPage />} />
-          </Route>
+                {/* Main Application Layout (Protected) */}
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<DashboardLayout />}>
+                    {/* Working Routes */}
+                    <Route path="/overview" element={<OverviewPage />} />
+                    <Route path="/jobs" element={<JobsTable />} />
+                    <Route path="/create-job" element={<CreateJob />} />
+                    <Route path="/candidates" element={<CandidatesTable />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    
+                    {/* Dynamic fallback for other routes */}
+                    <Route path="/:pageId" element={<PlaceholderPage />} />
+                  </Route>
+                </Route>
 
-          {/* Wildcard Fallback */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </JobsProvider>
+                {/* Wildcard Fallback */}
+                <Route path="*" element={<Navigate to="/login" replace />} />
+              </Routes>
+            </BrowserRouter>
+          </DashboardProvider>
+        </CandidatesProvider>
+      </JobsProvider>
+    </AuthProvider>
   );
 }

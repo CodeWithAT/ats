@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { useAuth } from "./AuthContext";
 
 export type Job = {
   id: string;
@@ -12,35 +13,82 @@ export type Job = {
   description?: string;
 };
 
-const MOCK_JOBS: Job[] = [
-  { id: "1", title: "Senior Frontend Developer", department: "Engineering", status: "Active", type: "Full-time", location: "Remote", applicants: 45, postedDate: "2 days ago" },
-  { id: "2", title: "Product Marketing Manager", department: "Marketing", status: "Draft", type: "Contract", location: "Hybrid", applicants: 0, postedDate: "1 hour ago" },
-  { id: "3", title: "UX/UI Designer", department: "Design", status: "Closed", type: "Full-time", location: "Remote", applicants: 112, postedDate: "14 days ago" },
-];
-
 type JobsContextType = {
   jobs: Job[];
-  addJob: (job: Job) => void;
-  updateJob: (id: string, updated: Partial<Job>) => void;
+  isLoading: boolean;
+  addJob: (job: Omit<Job, "id" | "postedDate" | "applicants">) => Promise<void>;
+  updateJob: (id: string, updated: Partial<Job>) => Promise<void>;
+  deleteJob: (id: string) => Promise<void>;
+  refreshJobs: () => Promise<void>;
 };
 
 const JobsContext = createContext<JobsContextType | undefined>(undefined);
 
-export function JobsProvider({ children }: { children: ReactNode }) {
-  const [jobs, setJobs] = useState<Job[]>(MOCK_JOBS);
+const authHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+});
 
-  const addJob = (job: Job) => {
-    setJobs((prev) => [job, ...prev]);
+export function JobsProvider({ children }: { children: ReactNode }) {
+  const { token } = useAuth();
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const refreshJobs = useCallback(async () => {
+    if (!token) {
+      setJobs([]);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/hono/jobs", { headers: authHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        setJobs(data.map((j: any) => ({ ...j, id: String(j.id) })));
+      }
+    } catch {
+      // Silently fail - keep existing data
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    refreshJobs();
+  }, [refreshJobs]);
+
+  const addJob = async (job: Omit<Job, "id" | "postedDate" | "applicants">) => {
+    const res = await fetch("/api/hono/jobs", {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify(job),
+    });
+    if (!res.ok) throw new Error("Failed to create job");
+    await refreshJobs();
   };
 
-  const updateJob = (id: string, updated: Partial<Job>) => {
-    setJobs((prev) =>
-      prev.map((j) => (j.id === id ? { ...j, ...updated } : j))
-    );
+  const updateJob = async (id: string, updated: Partial<Job>) => {
+    const res = await fetch(`/api/hono/jobs/${id}`, {
+      method: "PUT",
+      headers: authHeaders(),
+      body: JSON.stringify(updated),
+    });
+    if (!res.ok) throw new Error("Failed to update job");
+    await refreshJobs();
+  };
+
+  const deleteJob = async (id: string) => {
+    const res = await fetch(`/api/hono/jobs/${id}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+    });
+    if (!res.ok) throw new Error("Failed to delete job");
+    await refreshJobs();
   };
 
   return (
-    <JobsContext.Provider value={{ jobs, addJob, updateJob }}>
+    <JobsContext.Provider value={{ jobs, isLoading, addJob, updateJob, deleteJob, refreshJobs }}>
       {children}
     </JobsContext.Provider>
   );
@@ -48,8 +96,6 @@ export function JobsProvider({ children }: { children: ReactNode }) {
 
 export function useJobs() {
   const context = useContext(JobsContext);
-  if (context === undefined) {
-    throw new Error("useJobs must be used within a JobsProvider");
-  }
+  if (context === undefined) throw new Error("useJobs must be used within a JobsProvider");
   return context;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Table } from '@tiptap/extension-table';
@@ -13,7 +13,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { 
   Bold, Italic, Strikethrough, Code, 
   Heading1, Heading2, List, ListOrdered, Quote, Undo, Redo,
-  ImageIcon, Table as TableIcon, PlusSquare, MinusSquare, CheckSquare, XSquare
+  ImageIcon, Table as TableIcon
 } from 'lucide-react';
 
 // --- TOOLBAR COMPONENT ---
@@ -54,54 +54,76 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const IconGroup = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex items-center gap-0.5 bg-white border border-gray-200/60 shadow-[0_1px_2px_rgba(0,0,0,0.03)] p-0.5 rounded-lg shrink-0">
+      {children}
+    </div>
+  );
+
   return (
-    <div className="flex flex-col border-b border-gray-200 bg-gray-50/80 p-2 rounded-t-lg gap-2 overflow-x-auto">
-      <div className="flex items-center gap-1 min-w-max">
-        <IconButton onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Bold"><Bold size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} title="Italic"><Italic size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleStrike().run()} disabled={!editor.can().chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')} title="Strikethrough"><Strikethrough size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleCode().run()} disabled={!editor.can().chain().focus().toggleCode().run()} isActive={editor.isActive('code')} title="Code"><Code size={16} /></IconButton>
-        <div className="w-px h-6 bg-gray-300 mx-1" />
-        <IconButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })} title="Heading 1"><Heading1 size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="Heading 2"><Heading2 size={16} /></IconButton>
-        <div className="w-px h-6 bg-gray-300 mx-1" />
-        <IconButton onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} title="Bullet List"><List size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} title="Ordered List"><ListOrdered size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive('blockquote')} title="Blockquote"><Quote size={16} /></IconButton>
-        <div className="flex-1 min-w-[20px]" />
-        <IconButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().chain().focus().undo().run()} title="Undo"><Undo size={16} /></IconButton>
-        <IconButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().chain().focus().redo().run()} title="Redo"><Redo size={16} /></IconButton>
+    <div className="flex flex-col border-b border-gray-200 bg-[#f8fafc] p-2 sm:p-3 rounded-t-lg gap-2.5">
+      <div className="flex flex-wrap items-center gap-2">
+        <IconGroup>
+          <IconButton onClick={() => editor.chain().focus().toggleBold().run()} disabled={!editor.can().chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Bold"><Bold size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleItalic().run()} disabled={!editor.can().chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} title="Italic"><Italic size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleStrike().run()} disabled={!editor.can().chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')} title="Strikethrough"><Strikethrough size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleCode().run()} disabled={!editor.can().chain().focus().toggleCode().run()} isActive={editor.isActive('code')} title="Code"><Code size={15} /></IconButton>
+        </IconGroup>
+        
+        <IconGroup>
+          <IconButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })} title="Heading 1"><Heading1 size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="Heading 2"><Heading2 size={15} /></IconButton>
+        </IconGroup>
+        
+        <IconGroup>
+          <IconButton onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} title="Bullet List"><List size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} title="Ordered List"><ListOrdered size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive('blockquote')} title="Blockquote"><Quote size={15} /></IconButton>
+        </IconGroup>
+        
+        <IconGroup>
+          <IconButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().chain().focus().undo().run()} title="Undo"><Undo size={15} /></IconButton>
+          <IconButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().chain().focus().redo().run()} title="Redo"><Redo size={15} /></IconButton>
+        </IconGroup>
       </div>
 
-      <div className="flex items-center gap-1 pt-1 border-t border-gray-200 min-w-max">
+      <div className="flex flex-wrap items-center gap-2 pt-1">
         <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
-        <IconButton title="Upload Local Image" onClick={() => fileInputRef.current?.click()}><ImageIcon size={16} className="text-blue-600" /></IconButton>
-        <div className="w-px h-6 bg-gray-300 mx-1" />
         
-        {!editor.isActive('table') ? (
-          <IconButton title="Insert Table" onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}>
-            <TableIcon size={16} className="text-green-600" />
-            <span className="text-[13px] font-medium pr-1">Insert Table</span>
-          </IconButton>
-        ) : (
-          <div className="flex items-center gap-1 bg-green-50/50 p-1 rounded-md border border-green-100">
-            <IconButton title="Add Row After" onClick={() => editor.chain().focus().addRowAfter().run()} disabled={!editor.can().addRowAfter()}>
-               <span className="text-[13px] font-medium px-1 text-green-700">Add Row</span>
+        <IconGroup>
+          <IconButton title="Upload Local Image" onClick={() => fileInputRef.current?.click()}><ImageIcon size={15} className="text-blue-600" /></IconButton>
+          {!editor.isActive('table') && (
+            <IconButton title="Insert Table" onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}>
+              <TableIcon size={15} className="text-green-600" />
             </IconButton>
-            <IconButton title="Delete Row" onClick={() => editor.chain().focus().deleteRow().run()} disabled={!editor.can().deleteRow()}>
-               <span className="text-[13px] font-medium px-1 text-red-600">Delete Row</span>
-            </IconButton>
-            <div className="w-px h-4 bg-green-200 mx-1" />
-            <IconButton title="Add Column After" onClick={() => editor.chain().focus().addColumnAfter().run()} disabled={!editor.can().addColumnAfter()}>
-               <span className="text-[13px] font-medium px-1 text-green-700">Add Col</span>
-            </IconButton>
-            <IconButton title="Delete Column" onClick={() => editor.chain().focus().deleteColumn().run()} disabled={!editor.can().deleteColumn()}>
-               <span className="text-[13px] font-medium px-1 text-red-600">Delete Col</span>
-            </IconButton>
-            <div className="w-px h-4 bg-green-200 mx-1" />
-            <IconButton title="Delete Table" onClick={() => editor.chain().focus().deleteTable().run()} disabled={!editor.can().deleteTable()}>
-               <span className="text-[13px] font-medium px-1 text-red-700">Delete Table</span>
-            </IconButton>
+          )}
+        </IconGroup>
+        
+        {editor.isActive('table') && (
+          <div className="flex flex-wrap items-center gap-1.5 bg-green-50/80 p-1 rounded-lg border border-green-200/60 shadow-sm">
+            <div className="flex items-center gap-0.5 bg-white rounded-md p-0.5 shadow-sm border border-green-100 shrink-0">
+              <IconButton title="Add Row After" onClick={() => editor.chain().focus().addRowAfter().run()} disabled={!editor.can().addRowAfter()}>
+                 <span className="text-[11px] font-semibold px-1 text-green-700">Add Row</span>
+              </IconButton>
+              <IconButton title="Delete Row" onClick={() => editor.chain().focus().deleteRow().run()} disabled={!editor.can().deleteRow()}>
+                 <span className="text-[11px] font-semibold px-1 text-red-600">Del Row</span>
+              </IconButton>
+            </div>
+            
+            <div className="flex items-center gap-0.5 bg-white rounded-md p-0.5 shadow-sm border border-green-100 shrink-0">
+              <IconButton title="Add Column After" onClick={() => editor.chain().focus().addColumnAfter().run()} disabled={!editor.can().addColumnAfter()}>
+                 <span className="text-[11px] font-semibold px-1 text-green-700">Add Col</span>
+              </IconButton>
+              <IconButton title="Delete Column" onClick={() => editor.chain().focus().deleteColumn().run()} disabled={!editor.can().deleteColumn()}>
+                 <span className="text-[11px] font-semibold px-1 text-red-600">Del Col</span>
+              </IconButton>
+            </div>
+            
+            <div className="flex items-center gap-0.5 bg-white rounded-md p-0.5 shadow-sm border border-green-100 shrink-0">
+              <IconButton title="Delete Table" onClick={() => editor.chain().focus().deleteTable().run()} disabled={!editor.can().deleteTable()}>
+                 <span className="text-[11px] font-semibold px-1 text-red-700">Del Table</span>
+              </IconButton>
+            </div>
           </div>
         )}
       </div>
@@ -117,7 +139,7 @@ export default function TiptapEditor({
   content?: string, 
   onChange?: (html: string) => void 
 }) {
-  const [updateIndex, setUpdateIndex] = useState(0);
+
 
   const editor = useEditor({
     extensions: [
@@ -139,8 +161,7 @@ export default function TiptapEditor({
       } 
     },
     onUpdate: ({ editor }) => { if (onChange) onChange(editor.getHTML()); },
-    onTransaction: () => { setUpdateIndex((val) => val + 1); },
-    onSelectionUpdate: () => { setUpdateIndex((val) => val + 1); },
+
   });
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 // Independent Status Cell Component
 export const StatusCell = ({ status }: { status: 'Ready' | 'Building' | 'Error' }) => {
